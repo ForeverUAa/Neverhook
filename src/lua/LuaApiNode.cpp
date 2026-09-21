@@ -76,7 +76,7 @@ NodeSlot* slotOf(int handle) {
     return nullptr;
 }
 
-    int pushNode(lua_State* L, CCNode* node, bool created) {
+int pushNode(lua_State* L, CCNode* node, bool created) {
     if (!node) {
         lua_pushnil(L);
         return 1;
