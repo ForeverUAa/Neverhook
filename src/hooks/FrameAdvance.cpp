@@ -1,6 +1,8 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/GJBaseGameLayer.hpp>
+#if !defined(GEODE_IS_IOS)
 #include <Geode/modify/CCKeyboardDispatcher.hpp>
+#endif
 #include "../Config.hpp"
 #include "FrameAdvanceState.hpp"
 
@@ -60,6 +62,8 @@ class $modify(NHFrameStepper, GJBaseGameLayer) {
     }
 };
 
+#if !defined(GEODE_IS_IOS)
+
 class $modify(NHFrameStepperKeys, cocos2d::CCKeyboardDispatcher) {
     bool dispatchKeyboardMSG(cocos2d::enumKeyCodes key, bool isKeyDown, bool isKeyRepeat, double timestamp) {
         auto& c = Config::get();
@@ -77,3 +81,5 @@ class $modify(NHFrameStepperKeys, cocos2d::CCKeyboardDispatcher) {
         return CCKeyboardDispatcher::dispatchKeyboardMSG(key, isKeyDown, isKeyRepeat, timestamp);
     }
 };
+
+#endif
