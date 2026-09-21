@@ -1,5 +1,7 @@
 #include <Geode/Geode.hpp>
+#ifndef GEODE_IS_IOS
 #include <Geode/modify/CCKeyboardDispatcher.hpp>
+#endif
 #include <Geode/modify/GJBaseGameLayer.hpp>
 #include <Geode/modify/PauseLayer.hpp>
 #include <Geode/modify/EditorPauseLayer.hpp>
@@ -18,6 +20,7 @@ $on_mod(Loaded) {
         .draw([]  { DrawFrameWorkGUI(); });
 }
 
+#ifndef GEODE_IS_IOS
 class $modify(NHKeyboard, cocos2d::CCKeyboardDispatcher) {
     static void onModify(auto& self) {
         (void)self.setHookPriority("cocos2d::CCKeyboardDispatcher::dispatchKeyboardMSG", 999999);
@@ -49,6 +52,7 @@ class $modify(NHKeyboard, cocos2d::CCKeyboardDispatcher) {
     }
 };
 
+#endif
 class $modify(NHMenuBGL, GJBaseGameLayer) {
     static void onModify(auto& self) {
         (void)self.setHookPriority("GJBaseGameLayer::handleButton", 999999);
