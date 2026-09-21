@@ -34,10 +34,12 @@ constexpr int kMaxTextLen  = 512;
 char kNodeMetaKey = 0;
 
 struct NodeSlot {
-    int         handle = 0;
+    int handle;
     std::string owner;
-    CCNode*     node    = nullptr;
-    bool        created = false;
+    CCNode* node;
+    bool created;
+
+    std::shared_ptr<bool> alive;
 };
 
 std::vector<NodeSlot> g_nodes;
@@ -896,27 +898,34 @@ void releaseScriptNodes(const std::string& owner) {
 }
 
 void updateNodes() {
-    auto*    director = CCDirector::sharedDirector();
-    CCScene* scene    = director ? director->getRunningScene() : nullptr;
+    auto* director = CCDirector::sharedDirector();
+    CCScene* scene = director ? director->getRunningScene() : nullptr;
 
     static CCScene* lastScene = nullptr;
-    if (scene == lastScene) return;
 
-    lastScene = scene;
+    if (scene != lastScene) {
+        lastScene = scene;
 
-    if (g_world) {
-        if (g_world->getParent()) g_world->removeFromParent();
-        g_world->release();
-        g_world = nullptr;
+        if (g_world) {
+            if (g_world->getParent())
+                g_world->removeFromParent();
+
+            g_world->release();
+            g_world = nullptr;
+        }
     }
 
-    for (auto& slot : g_nodes)
-        if (!slot.created) slot.node = nullptr;
-
     g_nodes.erase(
-        std::remove_if(g_nodes.begin(), g_nodes.end(),
-            [](const NodeSlot& slot) { return slot.node == nullptr; }),
-        g_nodes.end());
+        std::remove_if(
+            g_nodes.begin(),
+            g_nodes.end(),
+            [](const NodeSlot& slot) {
+                return !slot.node ||
+                       (slot.alive && !*slot.alive);
+            }
+        ),
+        g_nodes.end()
+    );
 }
 
 int l_node_player(lua_State* L) {
