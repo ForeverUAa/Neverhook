@@ -72,6 +72,16 @@ CPMAddPackage(
 )
 
 set(LUAJIT_DIR "${luajit_src_SOURCE_DIR}" CACHE PATH "LuaJIT sources" FORCE)
+# Patch the downloaded community wrapper before configuring it.
+execute_process(
+    COMMAND ${CMAKE_COMMAND}
+        -DLUAJIT_CMAKE_SOURCE_DIR=${luajit_cmake_SOURCE_DIR}
+        -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/PatchLuaJIT.cmake
+    RESULT_VARIABLE LUAJIT_PATCH_RESULT
+)
+if(NOT LUAJIT_PATCH_RESULT EQUAL 0)
+    message(FATAL_ERROR "Failed to patch luajit-cmake")
+endif()
 set(LUAJIT_BUILD_EXE OFF CACHE BOOL "" FORCE)
 set(LUA_BUILD_AS_DLL OFF CACHE BOOL "" FORCE)
 add_subdirectory(${luajit_cmake_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/luajit)
