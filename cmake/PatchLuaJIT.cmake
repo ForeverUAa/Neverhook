@@ -35,17 +35,20 @@ string(REPLACE
             -DCMAKE_C_COMPILER=cc
             -DCMAKE_C_COMPILER_TARGET=
             -DCMAKE_TOOLCHAIN_FILE=
-            -DEXTRA_COMPILER_FLAGS=-DLUAJIT_TARGET=LUAJIT_ARCH_ARM]=]
+            -DEXTRA_COMPILER_FLAGS=${BUILDVM_TARGET_FLAG}]=]
+    CONTENT "${CONTENT}"
+)
+
+string(REPLACE
+    "set(BUILDVM_EXE buildvm)"
+    "if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+  set(BUILDVM_TARGET_FLAG -DLUAJIT_TARGET=LUAJIT_ARCH_ARM64)
+else()
+  set(BUILDVM_TARGET_FLAG -DLUAJIT_TARGET=LUAJIT_ARCH_ARM)
+endif()
+
+set(BUILDVM_EXE buildvm)"
     CONTENT "${CONTENT}"
 )
 
 file(WRITE "${LUAJIT_CMAKE_FILE}" "${CONTENT}")
-
-# buildvm must be a native host executable, but it must generate code for
-# the target architecture. Android32 needs a 32-bit host tool, while iOS and
-# Android64 can use the native 64-bit host compiler.
-string(REPLACE
-    "-DEXTRA_COMPILER_FLAGS=-DLUAJIT_TARGET=LUAJIT_ARCH_ARM]"
-    "-DEXTRA_COMPILER_FLAGS=-DLUAJIT_TARGET=LUAJIT_ARCH_ARM64]"
-    CONTENT "${CONTENT}"
-)
