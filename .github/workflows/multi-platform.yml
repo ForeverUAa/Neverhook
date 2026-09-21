@@ -41,9 +41,11 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y gcc-multilib g++-multilib
 
       - name: Build the mod
-        uses: geode-sdk/build-geode-mod@main
+        uses: geode-sdk/build-geode-mod@e26ece68d56a3cfa0a7f790d8120c965008c3d08
         with:
           combine: true
+          sdk: given
+          bindings-ref: 2a5fd87
           target: ${{ matrix.config.target }}
 
   package:
@@ -52,7 +54,7 @@ jobs:
     needs: ['build']
 
     steps:
-      - uses: geode-sdk/build-geode-mod/combine@main
+      - uses: geode-sdk/build-geode-mod/combine@e26ece68d56a3cfa0a7f790d8120c965008c3d08
         id: build
 
       - uses: actions/upload-artifact@v4
