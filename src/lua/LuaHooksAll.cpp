@@ -24,7 +24,9 @@
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/PlayerObject.hpp>
 #include <Geode/modify/UILayer.hpp>
+#if !defined(GEODE_IS_IOS)
 #include <Geode/modify/CCKeyboardDispatcher.hpp>
+#endif
 
 using namespace geode::prelude;
 
@@ -306,6 +308,7 @@ class $modify(NHLuaAllUILayer, UILayer) {
     }
 };
 
+#if !defined(GEODE_IS_IOS)
 class $modify(NHLuaAllKeyboard, cocos2d::CCKeyboardDispatcher) {
     bool dispatchKeyboardMSG(cocos2d::enumKeyCodes key, bool isKeyDown, bool isKeyRepeat,
                              double timestamp) {
@@ -321,6 +324,8 @@ class $modify(NHLuaAllKeyboard, cocos2d::CCKeyboardDispatcher) {
                                                                   timestamp);
     }
 };
+
+#endif
 
 class $modify(NHLuaAllLevelInfo, LevelInfoLayer) {
     void levelDownloadFinished(GJGameLevel* level) {
