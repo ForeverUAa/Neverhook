@@ -45,7 +45,7 @@ jobs:
         with:
           combine: true
           sdk: given
-          bindings-ref: 2a5fd87
+          bindings-ref: 2a8b5c489ce8b49e7061b0543aa2bc5b22570063
           target: ${{ matrix.config.target }}
 
   package:
