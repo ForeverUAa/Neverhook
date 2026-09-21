@@ -264,7 +264,11 @@ inline void DrawWatermark()
     {
         std::time_t t = std::time(nullptr);
         std::tm lt{};
+#if defined(_WIN32)
         localtime_s(&lt, &t);
+#else
+        localtime_r(&t, &lt);
+#endif
         char b[32];
         std::snprintf(b, sizeof(b), "%02d:%02d:%02d", lt.tm_hour, lt.tm_min, lt.tm_sec);
         segs.push_back({ b, false });

@@ -213,20 +213,17 @@ void renderRegion(const ImDrawList*, const ImDrawCmd* cmd) {
     GLint previousTexture = 0;
     GLint previousProgram = 0;
     GLint previousArray   = 0;
-    GLint previousVao     = 0;
     GLint previousBlendSrc = GL_SRC_ALPHA;
     GLint previousBlendDst = GL_ONE_MINUS_SRC_ALPHA;
 
     glGetIntegerv(GL_TEXTURE_BINDING_2D, &previousTexture);
     glGetIntegerv(GL_CURRENT_PROGRAM, &previousProgram);
     glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &previousArray);
-    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &previousVao);
     glGetIntegerv(GL_BLEND_SRC_ALPHA, &previousBlendSrc);
     glGetIntegerv(GL_BLEND_DST_ALPHA, &previousBlendDst);
 
     const GLboolean previousScissor = glIsEnabled(GL_SCISSOR_TEST);
 
-    glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glActiveTexture(GL_TEXTURE0);
@@ -319,7 +316,6 @@ void renderRegion(const ImDrawList*, const ImDrawCmd* cmd) {
 
     glBindTexture(GL_TEXTURE_2D, (GLuint)previousTexture);
     glBindBuffer(GL_ARRAY_BUFFER, (GLuint)previousArray);
-    glBindVertexArray((GLuint)previousVao);
     glUseProgram((GLuint)previousProgram);
 
     glBlendFunc((GLenum)previousBlendSrc, (GLenum)previousBlendDst);
