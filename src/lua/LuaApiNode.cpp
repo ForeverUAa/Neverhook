@@ -76,32 +76,39 @@ NodeSlot* slotOf(int handle) {
     return nullptr;
 }
 
-int pushNode(lua_State* L, CCNode* node, bool created) {
+    int pushNode(lua_State* L, CCNode* node, bool created) {
     if (!node) {
         lua_pushnil(L);
         return 1;
     }
 
+    const auto owner = ownerId(L);
+
     for (const auto& slot : g_nodes) {
-        if (slot.node == node) {
+        if (slot.node == node && slot.owner == owner) {
             lua_pushinteger(L, slot.handle);
             return 1;
         }
     }
 
     if ((int)g_nodes.size() >= kMaxNodes) {
-
-        return luaL_error(L, "too many node handles are alive (%d max), "
-                             "free some with node.forget()", kMaxNodes);
+        return luaL_error(
+            L,
+            "too many node handles are alive (%d max), "
+            "free some with node.forget()",
+            kMaxNodes
+        );
     }
 
     NodeSlot slot;
     slot.handle  = g_nextNode++;
-    slot.owner   = ownerId(L);
+    slot.owner   = owner;
     slot.node    = node;
     slot.created = created;
 
-    if (created) node->retain();
+    if (created)
+        node->retain();
+
     g_nodes.push_back(slot);
 
     lua_pushinteger(L, slot.handle);
