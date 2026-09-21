@@ -51,7 +51,27 @@ target_sources(imgui INTERFACE
 set(HAS_IMGUI ON)
 
 # 2) cocos/Geode backend. e66d02b is no longer available; geode is the default branch.
-CPMAddPackage("gh:prevter/gd-imgui-cocos#geode")
+CPMAddPackage(
+    NAME gd_imgui_cocos
+    GITHUB_REPOSITORY prevter/gd-imgui-cocos
+    GIT_TAG 6383c75f7c3ec1ef63d24e0bc757dd5d4d326f18
+)
+
+# gd-imgui-cocos includes CCKeyboardDispatcher.hpp even though its keyboard
+# modifier is only used on macOS. Geode 5.8.2 does not provide a valid iOS
+# modify address for that class, so the generated header contains an empty
+# address expression. Keep the dependency pinned and remove only that include
+# for iOS; the actual keyboard modifier is already macOS-only upstream.
+if (IOS)
+    file(READ "${gd_imgui_cocos_SOURCE_DIR}/src/hooks.cpp" GD_IMGUI_COCOS_HOOKS)
+    string(REPLACE
+        "#include <Geode/modify/CCKeyboardDispatcher.hpp>\n"
+        ""
+        GD_IMGUI_COCOS_HOOKS
+        "${GD_IMGUI_COCOS_HOOKS}"
+    )
+    file(WRITE "${gd_imgui_cocos_SOURCE_DIR}/src/hooks.cpp" "${GD_IMGUI_COCOS_HOOKS}")
+endif()
 
 # -- LuaJIT ------------------------------------------------------------
 # LuaJIT ships a Makefile build only, so the sources are fetched plain and
