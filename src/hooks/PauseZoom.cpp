@@ -1,7 +1,9 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/PauseLayer.hpp>
+#if !defined(GEODE_IS_IOS)
 #include <Geode/modify/CCMouseDispatcher.hpp>
+#endif
 #include <imgui.h>
 #include "../Config.hpp"
 #include "../gui/vars.h"
@@ -84,6 +86,8 @@ class $modify(NHPauseZoomPauseLayer, PauseLayer) {
     }
 };
 
+#if !defined(GEODE_IS_IOS)
+
 class $modify(NHPauseZoomMouse, CCMouseDispatcher) {
     bool dispatchScrollMSG(float y, float x) {
         if (Vars::menuOpen || ImGui::GetIO().WantCaptureMouse) {
@@ -111,3 +115,6 @@ class $modify(NHPauseZoomMouse, CCMouseDispatcher) {
         return CCMouseDispatcher::dispatchScrollMSG(y, x);
     }
 };
+
+
+#endif
