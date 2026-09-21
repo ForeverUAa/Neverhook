@@ -3,8 +3,10 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS" OR IOS)
     set(CMAKE_OSX_ARCHITECTURES "arm64")
-else()
-    set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64")
+elseif (APPLE)
+    # macos-latest is an Apple Silicon runner. LuaJIT's generated VM assembly
+    # is architecture-specific, so do not ask it to generate a universal binary.
+    set(CMAKE_OSX_ARCHITECTURES "arm64")
 endif()
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
