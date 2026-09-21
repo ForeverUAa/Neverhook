@@ -13,9 +13,9 @@ string(REPLACE
 
 string(REPLACE
     "            ${CMAKE_CURRENT_LIST_DIR}/host/buildvm
-    -DCMAKE_SIZEOF_VOID_P=${CMAKE_SIZEOF_VOID_P}"
+            -DCMAKE_SIZEOF_VOID_P=${CMAKE_SIZEOF_VOID_P}"
     "            ${CMAKE_CURRENT_LIST_DIR}/host/buildvm
-    -DCMAKE_SIZEOF_VOID_P=${CMAKE_SIZEOF_VOID_P}
+            -DCMAKE_SIZEOF_VOID_P=${CMAKE_SIZEOF_VOID_P}
             -DCMAKE_C_COMPILER=cc
             -DCMAKE_C_COMPILER_TARGET=
             -DCMAKE_TOOLCHAIN_FILE="
