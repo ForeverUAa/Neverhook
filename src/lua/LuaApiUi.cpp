@@ -104,7 +104,7 @@ protected:
         const int ref = m_ref;
         m_ref = -1;
 
-        deliverString(m_owner, ref, m_input ? m_input->getString() : std::string());
+        deliverString(m_owner, ref, m_input ? std::string(m_input->getString().c_str()) : std::string());
         this->removeFromParent();
     }
 
